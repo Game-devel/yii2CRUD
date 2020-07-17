@@ -1,0 +1,4 @@
+GET /api/v1/books/list - получение списка книг с именем автора
+GET /api/v1/books/id - получение данных книги по id
+POST /api/v1/books/id/ - update обновление данных книги
+DELETE /api/v1/books/id - удаление записи книги из бд 

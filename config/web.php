@@ -11,6 +11,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@api' => dirname(dirname(__DIR__)) . '/api',
     ],
     'components' => [
         'request' => [
@@ -49,9 +50,18 @@ $config = [
             'showScriptName' => false,    
             'enableStrictParsing' => false,        
             'rules'=>[
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/books'], 'pluralize' => false, 'prefix' => 'api', 'extraPatterns' => [
+                        'DELETE {id}' => 'delete',
+                        'POST {id}/update' => 'update',                        
+                        'GET list' => 'index',
+                        'GET /{id}' => 'view',                        
+                    ],
+                ],                
                 '/' => 'site/index',
+                '<controller:\w+>/<action:\w+>/<id:\w+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>/list/'=>'<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/'=>'<controller>/<action>',                
-                'admin' => 'admin/panel/'
+                'admin' => 'admin/panel/',                                                
             ]
         ],
     ],
@@ -59,7 +69,10 @@ $config = [
         'admin' => [
             'class' => 'app\modules\admin\Module',
             'layout' => 'admin'
-        ],
+        ],   
+        'v1' => [                        
+            'class' => 'app\api\modules\v1\Module',
+        ],     
     ],
     'params' => $params,
 ];
