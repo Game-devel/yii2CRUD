@@ -11,6 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
 use app\models\RegistrationForm;
+use app\models\Books;
 use yii\web\UploadedFile;
 
 
@@ -66,7 +67,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $books = Books::find()->with('author')->orderBy(['author_id' => SORT_DESC])->all();
+        return $this->render('index',[
+            'books' => $books
+        ]);
     }
 
     /**

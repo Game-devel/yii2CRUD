@@ -49,7 +49,7 @@ $config = [
             'showScriptName' => false,    
             'enableStrictParsing' => false,        
             'rules'=>[
-                '/' => 'site1/index',
+                '/' => 'site/index',
                 '<controller:\w+>/<action:\w+>/'=>'<controller>/<action>',                
                 'admin' => 'admin/panel/'
             ]
