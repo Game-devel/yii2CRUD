@@ -9,6 +9,11 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\User;
+use app\models\RegistrationForm;
+use yii\web\UploadedFile;
+
+
 
 class SiteController extends Controller
 {
@@ -84,6 +89,42 @@ class SiteController extends Controller
         return $this->render('login', [
             'model' => $model,
         ]);
+    }
+
+    public function actionRegistration()
+    {
+        if (Yii::$app->user->isGuest) {
+            $model = new RegistrationForm();
+
+            if (Yii::$app->request->isPost) {
+                $model->load(Yii::$app->request->post());
+                $model->idCard = UploadedFile::getInstance($model, 'idCard');                
+                if ($model->validate()){                    
+                    $user = new User();
+                    $user->name = $model->name;
+                    $user->surname = $model->surname;
+                    $user->patronymic = $model->patronymic;
+                    $user->organization = $model->organization;
+                    $user->email = $model->email;
+                    $user->phone = $model->phone;
+                    $email = explode('@', $model->email);
+                    $user->username = $email[0];
+                    $imgUrl = $model->uploadCard();
+                    $user->idCard = $imgUrl;
+                    $user->password = Yii::$app->security->generatePasswordHash($model->password);
+                    $user->role = 3; 
+                    if($user->validate()&&$user->save()){
+                        return $this->goHome();
+                    }
+                }
+            }
+
+            return $this->render('registration', [
+                'model' => $model,
+            ]);
+        }
+        
+        return $this->goHome();
     }
 
     /**

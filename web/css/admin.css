@@ -1,0 +1,129 @@
+/*Админ панель стили*/
+.d-flex {
+    display:flex;
+}
+
+.admin-main {
+    padding-top:50px;
+    height:100vh;
+}
+
+.admin-menu {
+    width:300px;
+    background:#333333;
+}
+
+.admin-nav a {
+    color:#fff;
+    text-transform:uppercase;
+    display:block;
+    width:100%;
+    padding:15px;
+    border-bottom:1px solid #000;
+}
+
+.admin-nav > li > a:hover , .admin-nav > li > a:focus , .admin-nav > li.active, .admin-nav .open > a, .admin-nav .open > a:hover, .admin-nav .open > a:focus{
+    text-decoration:none;
+    background:rgba(0,0,0,0.4);
+    border-bottom:1px solid #000;
+    ;
+}
+
+.admin-nav, .admin-nav ul {
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+.admin-content {
+    width:100%;
+    overflow:hidden auto;
+    padding:15px;
+    position:relative;
+    color:#333;
+}
+
+.admin-content a:not(.btn) {
+    color:#333;
+}
+
+.admin-content h3{
+    margin-top:0;
+}
+
+.admin-content .tab-content {
+    padding-top:15px;
+}
+
+.fromRight {
+    display:block;
+    position:fixed;
+    background:#fff;
+    padding:15px;
+    box-shadow:-2px 0 5px #000;
+    right:-520px;
+    top:50px;
+    height: calc(100% - 50px);
+    min-width:520px;
+    overflow:hidden auto;
+}
+
+.grid-view tr td:last-child {
+    text-align:center;
+    width:120px;
+}
+
+.grid-view tr td:first-child {
+    width:50px;
+}
+
+td a  {
+    padding:2px;
+}
+
+
+td a+a{
+    margin-left:5px;
+}
+
+.glyphicon {
+    transition:0.3s all ease;
+}
+
+.glyphicon-pencil:hover {
+    color:#0ab900;
+}
+
+.glyphicon-trash:hover {
+    color:#ff0500;
+}
+
+.glyphicon-download-alt:hover {
+    color:#007fff;
+}
+
+
+.glyphicon-ok-sign {
+    color:#0ab900;
+}
+
+.glyphicon-ok-sign:hover {
+    color:#ff0500;
+}
+
+.glyphicon-ok-sign:hover:before {
+    content: "\e082";
+}
+
+.glyphicon-minus-sign {
+    color:#ff0500;
+}
+
+
+.glyphicon-minus-sign:hover {
+    color:#0ab900;
+}
+
+.glyphicon-minus-sign:hover:before {
+    content: "\e084";
+}

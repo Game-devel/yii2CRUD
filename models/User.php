@@ -2,38 +2,76 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
-{
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
+use Yii;
+/**
+ * This is the model class for table "user".
+ *
+ * @property int $id
+ * @property string $username
+ * @property string $email
+ * @property string $phone
+ * @property string $name
+ * @property string $surname
+ * @property string $patronymic
+ * @property string $organization
+ * @property string $password
+ * @property string $authKey
+ * @property int $role
+ *
+ * @property UserRole $role0
+ * 
+ */
 
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
+class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
+{   
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'user';
+    }
 
     /**
      * {@inheritdoc}
      */
+    public function rules()
+    {
+        return [
+            [['username', 'email', 'phone', 'name', 'surname', 'patronymic', 'organization', 'password', 'role', 'idCard'], 'required'],
+            [['username', 'email', 'phone', 'name', 'surname', 'patronymic', 'organization', 'password', 'authKey'], 'string'],
+            [['role'], 'integer'],
+            [['email'], 'unique', 'targetClass' => self::className(),  'message' => 'Эта почта уже зарегистрированна'],
+            [['phone'], 'unique', 'targetClass' => self::className(),  'message' => 'Этот телефон уже зарегистрирован'],
+            [['role'], 'exist', 'skipOnError' => true, 'targetClass' => UserRole::className(), 'targetAttribute' => ['role' => 'id']],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'name' => 'Name',
+            'surname' => 'Surname',
+            'patronymic' => 'Patronymic',
+            'organization' => 'Organization',
+            'password' => 'Password',
+            'authKey' => 'Auth Key',
+            'role' => 'Role',
+            'idCard' => 'ID Card'
+        ];
+    }
+
+
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return static::findOne($id);
     }
 
     /**
@@ -49,22 +87,15 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 
         return null;
     }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
+    
+    public static function findByLogin($email)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return static::findOne(['email' => $email]);
+    }
+    
+    public static function findByRole($role)
+    {
+        return static::findAll(['role' => $role]);
     }
 
     /**
@@ -99,6 +130,19 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        return Yii::$app->security->validatePassword($password, $this->password);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRoleData()
+    {
+        return $this->hasOne(UserRole::className(), ['id' => 'role']);
+    }
+
+    public function getFio()
+    {
+        return $this->name .' '. $this->surname .' '.$this->patronymic;
     }
 }
