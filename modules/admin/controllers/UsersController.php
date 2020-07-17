@@ -37,8 +37,7 @@ class UsersController extends \yii\web\Controller
         $searchModel = new UserSearch();
         // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);        
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find()->where(['<>','role',3]),            
-            'sort' => ['defaultOrder' => ['created_at' => SORT_DESC]]
+            'query' => User::find()->where(['<>','role',3]),
         ]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
